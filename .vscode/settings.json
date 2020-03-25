@@ -1,0 +1,6 @@
+{
+    "nxunitExplorer.nunit": "packages/nunit.consolerunner/3.9.0/tools/nunit3-console.exe",
+    "nxunitExplorer.modules": [
+        "MSBuildSandbox/bin/Debug/MSBuildSandbox.Tests.dll",
+    ],
+}
