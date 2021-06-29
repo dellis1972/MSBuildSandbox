@@ -12,7 +12,7 @@
     <PackageReference Include="Xamarin.Build.AsyncTask" Version="0.3.4" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MSBuildSandbox.targets">
+    <None Include="*.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

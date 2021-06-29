@@ -35,6 +35,30 @@ namespace MSBuildSandbox.Tests {
 			return loggers;
 		}
 
+		Project LoadProject (XmlReader reader) {
+			if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
+				Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", typeof (Tests).Assembly.Location);
+			}
+			try {
+				var collection = new ProjectCollection ();
+				return collection.LoadProject (reader);
+			} finally {
+				if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
+					Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", null);
+				}
+			}
+		}
+		Project LoadProject (string source ) {
+			var ms = new StringReader (source);
+			var reader = XmlReader.Create (ms);
+			return LoadProject(reader);
+		}
+
+		Project LoadProjectFromFile (string file) {
+			var reader = XmlReader.Create (file);
+			return LoadProject(reader);
+		}
+
 		[Test]
 		public void ExampleTaskTest ()
 		{
@@ -48,6 +72,7 @@ namespace MSBuildSandbox.Tests {
 		[Test]
 		public void ExampleTargetTest ()
 		{
+
 			var path = Path.Combine (Root, "temp", TestContext.CurrentContext.Test.Name);
 			Directory.CreateDirectory (path);
 			var current = Directory.GetCurrentDirectory ();
@@ -60,10 +85,8 @@ namespace MSBuildSandbox.Tests {
 	<Message Text=""$(FrameworkSDKRoot)"" Importance=""High"" />
 </Target>
 </Project>";
-				var ms = new StringReader (source);
-				var reader = XmlReader.Create (ms);
-				var collection = new ProjectCollection ();
-				var project = collection.LoadProject (reader);
+
+				var project = LoadProject (source);
 				var sb = new StringBuilder ();
 				var b = project.Build ("RunTest", CreateLogger (sb));
 				Assert.True (b, $"Build should have worked. {sb}");
