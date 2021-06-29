@@ -1,5 +1,5 @@
 {
     "nxunitExplorer.modules": [
-        "MSBuildSandbox.Tests/bin/Debug/MSBuildSandbox.Tests.dll"
+        "MSBuildSandbox.Tests/bin/Debug/net472/MSBuildSandbox.Tests.dll"
     ],
 }
