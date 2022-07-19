@@ -2,5 +2,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
  	<UsingTask TaskName="MSBuildSandbox.Tasks.Example"
 		AssemblyFile="MSBuildSandbox.Tasks.dll"
-		TaskFactory="TaskHostFactory" />
+	/>
 </Project>
