@@ -78,6 +78,7 @@ namespace MSBuildSandbox.Tests {
 			var engine = CreateMockEngine ();
 			var task = new Example () {
 				BuildEngine = engine,
+				Text = "Hello World",
 			};
 			Assert.True (task.Execute ());
 		}
