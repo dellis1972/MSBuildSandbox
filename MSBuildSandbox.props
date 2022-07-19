@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <MSBuildPackageReferenceVersion>15.10.0</MSBuildPackageReferenceVersion>
+        <MSBuildPackageReferenceVersion>17.1.0</MSBuildPackageReferenceVersion>
     </PropertyGroup>
 </Project>

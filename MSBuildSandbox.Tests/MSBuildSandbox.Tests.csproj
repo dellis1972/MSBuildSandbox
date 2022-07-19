@@ -2,17 +2,19 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <Import Project="..\MSBuildSandbox.props" />
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.11.*" />
+    <PackageReference Include="NUnit" Version="3.13.*" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.9.*" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Microsoft.Build"                Version="$(MSBuildPackageReferenceVersion)" />
     <PackageReference Include="Microsoft.Build.Framework"      Version="$(MSBuildPackageReferenceVersion)" />
     <PackageReference Include="Microsoft.Build.Tasks.Core"     Version="$(MSBuildPackageReferenceVersion)" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MSBuildPackageReferenceVersion)" />
-    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MSBuildSandbox.Tasks\MSBuildSandbox.Tasks.csproj">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -7,6 +8,7 @@ using System.Xml;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
+using Microsoft.Build.Utilities;
 using MSBuildSandbox.Tasks;
 using NUnit;
 using NUnit.Framework;
@@ -19,9 +21,9 @@ namespace MSBuildSandbox.Tests {
 			}
 		}
 
-		IBuildEngine CreateMockEngine ()
+		IBuildEngine CreateMockEngine (IList<BuildErrorEventArgs> errors = null)
 		{
-			return new MockBuildEngine (TestContext.Out);
+			return new MockBuildEngine (TestContext.Out, errors);
 		}
 
 		IEnumerable<ILogger> CreateLogger (StringBuilder sb)
@@ -36,11 +38,13 @@ namespace MSBuildSandbox.Tests {
 		}
 
 		Project LoadProject (XmlReader reader) {
+			string path = GetMSbuildLocation ();
 			if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
 				Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", typeof (Tests).Assembly.Location);
 			}
 			try {
 				var collection = new ProjectCollection ();
+				collection.AddToolset (new Toolset (ToolLocationHelper.CurrentToolsVersion, path, collection, string.Empty));
 				return collection.LoadProject (reader);
 			} finally {
 				if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
@@ -48,6 +52,15 @@ namespace MSBuildSandbox.Tests {
 				}
 			}
 		}
+
+		public string GetMSbuildLocation ()
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				return ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
+			}
+			return @"/Library/Frameworks/Mono.framework/Versions/Current//lib/mono/msbuild/Current/bin/";
+		}
+
 		Project LoadProject (string source ) {
 			var ms = new StringReader (source);
 			var reader = XmlReader.Create (ms);
@@ -81,8 +94,9 @@ namespace MSBuildSandbox.Tests {
 				var source = @"<Project xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
 <Import Project=""..\..\MSBuildSandbox.targets"" />
 <Target Name=""RunTest"" >
-	<Example />
+	
 	<Message Text=""$(FrameworkSDKRoot)"" Importance=""High"" />
+	<Example />
 </Target>
 </Project>";
 
@@ -91,6 +105,7 @@ namespace MSBuildSandbox.Tests {
 				var b = project.Build ("RunTest", CreateLogger (sb));
 				Assert.True (b, $"Build should have worked. {sb}");
 			} finally {
+				Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", null);
 				Directory.SetCurrentDirectory (current);
 				Directory.Delete (path, recursive: true);
 			}
