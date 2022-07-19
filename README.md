@@ -55,3 +55,18 @@ have created.
 
 ## Example Targets Test
 
+This is an experiment in unit testing Tasks when being used from a Target.
+The test defines a project which we load in the unit test. The project imports
+the `MSBuildSandbox.targets` file along with the defined Tasks. 
+
+We then use the `Example` task and the `Message` task in a `Target` in the unit test.
+This allows us to call a `Task` from a `Target` and put breakpoints in the `Task`
+so we can step through the code. 
+
+This is a work in progress, and has only been tested on MacOS so far. 
+
+Wish List
+[X] - Break in Task when used from Targets.
+[] - Works on Windows in Visual Studio and VSCode.
+[] - Works on MacOS in Visual Studio for Mac
+[] - Step through target files (at this time not possible at all).
