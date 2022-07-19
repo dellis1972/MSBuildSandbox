@@ -67,6 +67,9 @@ This is a work in progress, and has only been tested on MacOS so far.
 
 Wish List
 - [X] Break in Task when used from Targets.
+
 - [] Works on Windows in Visual Studio and VSCode.
+
 - [] Works on MacOS in Visual Studio for Mac
+
 - [] Step through target files (at this time not possible at all).
