@@ -21,9 +21,9 @@ namespace MSBuildSandbox.Tests {
 			}
 		}
 
-		IBuildEngine CreateMockEngine (IList<BuildErrorEventArgs> errors = null)
+		IBuildEngine CreateMockEngine (IList<BuildErrorEventArgs> errors = null, IList<BuildWarningEventArgs> warnings = null, IList<BuildMessageEventArgs> messages = null, IList<CustomBuildEventArgs> customEvents = null)
 		{
-			return new MockBuildEngine (TestContext.Out, errors);
+			return new MockBuildEngine (TestContext.Out, errors, warnings, messages, customEvents);
 		}
 
 		IEnumerable<ILogger> CreateLogger (StringBuilder sb)
@@ -75,12 +75,14 @@ namespace MSBuildSandbox.Tests {
 		[Test]
 		public void ExampleTaskTest ()
 		{
-			var engine = CreateMockEngine ();
+			List<BuildMessageEventArgs> messages = new List<BuildMessageEventArgs> ();
+			var engine = CreateMockEngine (messages: messages);
 			var task = new Example () {
 				BuildEngine = engine,
 				Text = "Hello World",
 			};
 			Assert.True (task.Execute ());
+			Assert.AreEqual (1, messages.Count, "There should be 1 message");
 		}
 
 		[Test]

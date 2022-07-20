@@ -6,15 +6,24 @@ using Microsoft.Build.Framework;
 
 namespace MSBuildSandbox.Tests {
 	public class MockBuildEngine : IBuildEngine, IBuildEngine2, IBuildEngine3, IBuildEngine4 {
-		public MockBuildEngine (TextWriter output, IList<BuildErrorEventArgs> errors = null)
+		public MockBuildEngine (TextWriter output, IList<BuildErrorEventArgs> errors = null, IList<BuildWarningEventArgs> warnings = null, IList<BuildMessageEventArgs> messages = null, IList<CustomBuildEventArgs> customEvents = null)
 		{
 			this.Output = output;
 			this.Errors = errors;
+			this.Warnings = warnings;
+			this.Messages = messages;
+			this.CustomEvents = customEvents;
 		}
 
 		private TextWriter Output { get; }
 
 		private IList<BuildErrorEventArgs> Errors { get; }
+
+		private IList<BuildWarningEventArgs> Warnings { get; }
+
+		private IList<BuildMessageEventArgs> Messages { get; }
+
+		private IList<CustomBuildEventArgs> CustomEvents { get; }
 
 		int IBuildEngine.ColumnNumberOfTaskNode => -1;
 
@@ -31,6 +40,8 @@ namespace MSBuildSandbox.Tests {
 		void IBuildEngine.LogCustomEvent (CustomBuildEventArgs e)
 		{
 			this.Output.WriteLine ($"Custom: {e.Message}");
+			if (CustomEvents != null)
+				CustomEvents.Add (e);
 		}
 
 		void IBuildEngine.LogErrorEvent (BuildErrorEventArgs e)
@@ -43,11 +54,15 @@ namespace MSBuildSandbox.Tests {
 		void IBuildEngine.LogMessageEvent (BuildMessageEventArgs e)
 		{
 			this.Output.WriteLine ($"Message: {e.Message}");
+			if (Messages != null)
+				Messages.Add (e);
 		}
 
 		void IBuildEngine.LogWarningEvent (BuildWarningEventArgs e)
 		{
 			this.Output.WriteLine ($"Warning: {e.Message}");
+			if (Warnings != null)
+				Warnings.Add (e);
 		}
 
 		private Dictionary<object, object> Tasks = new Dictionary<object, object> ();
