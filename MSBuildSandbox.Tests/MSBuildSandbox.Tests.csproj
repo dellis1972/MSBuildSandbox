@@ -2,7 +2,7 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <Import Project="..\MSBuildSandbox.props" />
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.*" />
@@ -13,8 +13,6 @@
     <PackageReference Include="Microsoft.Build.Framework"      Version="$(MSBuildPackageReferenceVersion)" />
     <PackageReference Include="Microsoft.Build.Tasks.Core"     Version="$(MSBuildPackageReferenceVersion)" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MSBuildPackageReferenceVersion)" />
-    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MSBuildSandbox.Tasks\MSBuildSandbox.Tasks.csproj">

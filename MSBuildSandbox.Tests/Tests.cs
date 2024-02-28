@@ -39,18 +39,10 @@ namespace MSBuildSandbox.Tests {
 
 		Project LoadProject (XmlReader reader) {
 			string path = GetMSbuildLocation ();
-			if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
-				Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", typeof (Tests).Assembly.Location);
-			}
-			try {
-				var collection = new ProjectCollection ();
-				collection.AddToolset (new Toolset (ToolLocationHelper.CurrentToolsVersion, path, collection, string.Empty));
-				return collection.LoadProject (reader);
-			} finally {
-				if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
-					Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", null);
-				}
-			}
+			var collection = new ProjectCollection ();
+			collection.AddToolset (new Toolset (ToolLocationHelper.CurrentToolsVersion, path, collection, string.Empty));
+			return collection.LoadProject (reader);
+			
 		}
 
 		public string GetMSbuildLocation ()
@@ -58,7 +50,7 @@ namespace MSBuildSandbox.Tests {
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
 				return ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
 			}
-			return @"/Library/Frameworks/Mono.framework/Versions/Current//lib/mono/msbuild/Current/bin/";
+			return @"/usr/local/share/dotnet/sdk/8.0.100/";
 		}
 
 		Project LoadProject (string source ) {
@@ -86,7 +78,7 @@ namespace MSBuildSandbox.Tests {
 		}
 
 		[Test]
-		[Ignore ("Not working yet")]
+		//[Ignore ("Not working yet")]
 		public void ExampleTargetTest ()
 		{
 
@@ -98,9 +90,8 @@ namespace MSBuildSandbox.Tests {
 				var source = @"<Project xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
 <Import Project=""..\..\MSBuildSandbox.targets"" />
 <Target Name=""RunTest"" >
-	
 	<Message Text=""$(FrameworkSDKRoot)"" Importance=""High"" />
-	<Example />
+	<Example Text=""Test""/>
 </Target>
 </Project>";
 
@@ -109,7 +100,6 @@ namespace MSBuildSandbox.Tests {
 				var b = project.Build ("RunTest", CreateLogger (sb));
 				Assert.True (b, $"Build should have worked. {sb}");
 			} finally {
-				Environment.SetEnvironmentVariable ("MSBUILD_EXE_PATH", null);
 				Directory.SetCurrentDirectory (current);
 				Directory.Delete (path, recursive: true);
 			}
