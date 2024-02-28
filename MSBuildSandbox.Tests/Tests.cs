@@ -50,6 +50,9 @@ namespace MSBuildSandbox.Tests {
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
 				return ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
 			}
+			var path = Environment.GetEnvironmentVariable ("MSBuildExtensionsPath");
+			if (!string.IsNullOrEmpty (path))
+				return path;
 			return @"/usr/local/share/dotnet/sdk/8.0.100/";
 		}
 
