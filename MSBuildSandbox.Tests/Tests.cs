@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 //using Microsoft.Build.BuildEngine;
@@ -50,10 +51,14 @@ namespace MSBuildSandbox.Tests {
 			var path = Environment.GetEnvironmentVariable ("MSBuildExtensionsPath");
 			if (!string.IsNullOrEmpty (path))
 				return path;
-			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+			if (RuntimeInformation.IsOSPlatform (OSPlatform.Windows)) {
 				return ToolLocationHelper.GetPathToBuildToolsFile("msbuild.exe", ToolLocationHelper.CurrentToolsVersion);
 			}
-			return @"/usr/local/share/dotnet/sdk/8.0.100/";
+			else if (RuntimeInformation.IsOSPlatform (OSPlatform.OSX))
+				return @"/usr/local/share/dotnet/sdk/8.0.100/";
+			else if (RuntimeInformation.IsOSPlatform (OSPlatform.Linux))
+				return @"/usr/share/dotnet/sdk/8.0.200/";
+			return ToolLocationHelper.GetPathToBuildToolsFile("MSBuild.dll", ToolLocationHelper.CurrentToolsVersion);
 		}
 
 		Project LoadProject (string source ) {
